@@ -29,6 +29,10 @@ public class Usuario implements UserDetails {
         return null;
     }
 
+    public Long getId(){
+        return id;
+    }
+
     @Override
     public String getPassword() {
         return senha;

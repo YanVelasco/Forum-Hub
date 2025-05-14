@@ -29,7 +29,19 @@ public class TokenService {
         }
     }
 
-    public String verificarToken(String token){
+    public String gerarRefreshToken(Usuario usuario) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("12345678");
+            return JWT.create().withIssuer("forumhub")
+                    .withSubject(usuario.getId().toString())
+                    .withExpiresAt(expiracao(120))
+                    .sign(algorithm);
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("Erro ao gerar token de acesso", e);
+        }
+    }
+
+    public String verificarToken(String token) {
         DecodedJWT decodedJWT;
         try {
             Algorithm algorithm = Algorithm.HMAC256("12345678");
@@ -39,7 +51,7 @@ public class TokenService {
 
             decodedJWT = verifier.verify(token);
             return decodedJWT.getSubject();
-        } catch (JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             throw new RegraDeNegocioException("Erro ao verificar token JWT de acesso!");
         }
     }
