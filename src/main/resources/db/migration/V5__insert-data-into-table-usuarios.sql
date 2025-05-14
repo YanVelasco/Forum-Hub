@@ -1,0 +1,2 @@
+INSERT INTO usuarios (nome_completo, email, senha, nome_de_usuario, biografia, mini_biografia) VALUES
+('Yan Velasco', 'yan@email.com', '$2y$10$Mm0HkWDOep3zoEHBsCQddOM0JI2Wm5k.vAvmsHAHfX4w6D.ypphFi', 'YanVelasco', 'Desenvolvedor backend.', 'Backend lover');
