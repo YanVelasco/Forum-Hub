@@ -11,18 +11,33 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class ConfiguracoesDeSeguranca {
 
+    private final FiltroTokenAcesso filtroTokenAcesso;
+
+    public ConfiguracoesDeSeguranca(FiltroTokenAcesso filtroTokenAcesso) {
+        this.filtroTokenAcesso = filtroTokenAcesso;
+    }
+
+
     @Bean
     public SecurityFilterChain filtrosDeSeguranca(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS
                 ))
-                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+                        req -> {
+                            req.requestMatchers("/login").permitAll();
+                            req.anyRequest().authenticated();
+                        }
+                )
+                .addFilterBefore(filtroTokenAcesso, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
