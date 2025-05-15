@@ -20,8 +20,8 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usuarioRepository.findByEmailIgnoreCase(username)
-                .orElseThrow(() -> new UsernameNotFoundException("O usuário não foi encontrado!"));
+        return usuarioRepository.findByEmailIgnoreCaseAndVerificadoTrue(username)
+                .orElseThrow(() -> new UsernameNotFoundException("O usuário não foi encontrado ou não foi verificado"));
     }
 
     public Usuario cadastrar( DadosCadastroUsuario dados) {

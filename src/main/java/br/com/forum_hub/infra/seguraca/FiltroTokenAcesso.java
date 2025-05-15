@@ -35,8 +35,8 @@ public class FiltroTokenAcesso extends OncePerRequestFilter {
 
             String email = tokenService.verificarToken(token);
 
-            var usuario = usuarioRepository.findByEmailIgnoreCase(email).orElseThrow(
-                    () -> new RuntimeException("Usuário não encontrado!")
+            var usuario = usuarioRepository.findByEmailIgnoreCaseAndVerificadoTrue(email).orElseThrow(
+                    () -> new RuntimeException("Usuário não encontrado ou não verificado")
             );
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
