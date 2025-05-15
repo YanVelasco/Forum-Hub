@@ -23,6 +23,18 @@ public class Usuario implements UserDetails {
     private String biografia;
     private String miniBiografia;
 
+    public Usuario(DadosCadastroUsuario dados, String senhaCriptografada) {
+        this.nomeCompleto = dados.nomeCompleto();
+        this.email = dados.email();
+        this.senha = senhaCriptografada;
+        this.nomeDeUsuario = dados.nomeUsuario();
+        this.biografia = dados.biografia();
+        this.miniBiografia = dados.miniBiografia();
+    }
+
+    public Usuario() {
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
