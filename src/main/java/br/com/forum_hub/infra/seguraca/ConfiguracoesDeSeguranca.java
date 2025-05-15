@@ -33,7 +33,7 @@ public class ConfiguracoesDeSeguranca {
                 ))
                 .authorizeHttpRequests(
                         req -> {
-                            req.requestMatchers("/login", "/refresh-token", "/registrar").permitAll();
+                            req.requestMatchers("/login", "/refresh-token", "/registrar", "/verificar-conta").permitAll();
                             req.anyRequest().authenticated();
                         }
                 )

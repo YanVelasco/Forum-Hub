@@ -5,27 +5,31 @@ import br.com.forum_hub.domain.usuario.DadosListagemUsuario;
 import br.com.forum_hub.domain.usuario.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/registrar")
 public class UsuarioController {
 
     private final UsuarioService service;
+    private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService service) {
+    public UsuarioController(UsuarioService service, UsuarioService usuarioService) {
         this.service = service;
+        this.usuarioService = usuarioService;
     }
 
-    @PostMapping
+    @PostMapping("/registrar")
     public ResponseEntity<DadosListagemUsuario> cadastrar(@RequestBody @Valid DadosCadastroUsuario dados, UriComponentsBuilder uriBuilder){
         var usuario = service.cadastrar(dados);
         var uri = uriBuilder.path("/usuarios/{nomeUsuario}").buildAndExpand(usuario.getNomeDeUsuario()).toUri();
         return ResponseEntity.created(uri).body(new DadosListagemUsuario(usuario));
+    }
+
+    @GetMapping("/verificar-conta")
+    public ResponseEntity<String> verificarEmail(@RequestParam String codigo){
+        usuarioService.verificarEmail(codigo);
+        return ResponseEntity.ok("Email verificado com sucesso");
     }
 
 }

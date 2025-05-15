@@ -78,4 +78,18 @@ public class Usuario implements UserDetails {
     public String getMiniBiografia() {
         return miniBiografia;
     }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void verificar() {
+        if (expiracaoToken.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Token expirado");
+        }
+        this.verificado = true;
+        this.token = null;
+        this.expiracaoToken = null;
+    }
+
 }
