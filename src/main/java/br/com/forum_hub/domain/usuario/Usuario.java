@@ -1,4 +1,5 @@
 package br.com.forum_hub.domain.usuario;
+import br.com.forum_hub.domain.perfil.Perfil;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +29,7 @@ public class Usuario implements UserDetails {
     private Boolean verificado;
     private String token;
     private LocalDateTime expiracaoToken;
+    private List<Perfil> perfis;
 
     public Usuario(DadosCadastroUsuario dados, String senhaCriptografada) {
         this.nomeCompleto = dados.nomeCompleto();
