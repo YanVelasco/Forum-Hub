@@ -1,14 +1,11 @@
 package br.com.forum_hub.domain.usuario;
 import br.com.forum_hub.domain.perfil.Perfil;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -29,9 +26,16 @@ public class Usuario implements UserDetails {
     private Boolean verificado;
     private String token;
     private LocalDateTime expiracaoToken;
-    private List<Perfil> perfis;
 
-    public Usuario(DadosCadastroUsuario dados, String senhaCriptografada) {
+   @ManyToMany(fetch = FetchType.EAGER)
+   @JoinTable(
+       name = "usuarios_perfis",
+       joinColumns = @JoinColumn(name = "usuario_id"),
+       inverseJoinColumns = @JoinColumn(name = "perfil_id")
+   )
+   private List<Perfil> perfis = new ArrayList<>();
+
+    public Usuario(DadosCadastroUsuario dados, String senhaCriptografada, Perfil perfil) {
         this.nomeCompleto = dados.nomeCompleto();
         this.email = dados.email();
         this.senha = senhaCriptografada;
@@ -41,6 +45,7 @@ public class Usuario implements UserDetails {
         this.verificado = false;
         this.token = UUID.randomUUID().toString();
         this.expiracaoToken = LocalDateTime.now().plusMinutes(30);
+        this.perfis.add(perfil);
     }
 
     public Usuario() {
