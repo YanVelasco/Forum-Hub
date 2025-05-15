@@ -1,5 +1,6 @@
 package br.com.forum_hub.controller;
 
+import br.com.forum_hub.domain.perfil.DadosPerfil;
 import br.com.forum_hub.domain.usuario.DadosCadastroUsuario;
 import br.com.forum_hub.domain.usuario.DadosListagemUsuario;
 import br.com.forum_hub.domain.usuario.UsuarioService;
@@ -30,6 +31,15 @@ public class UsuarioController {
     public ResponseEntity<String> verificarEmail(@RequestParam String codigo){
         usuarioService.verificarEmail(codigo);
         return ResponseEntity.ok("Email verificado com sucesso");
+    }
+
+    @PatchMapping("/adcionar-perfil/{userId}")
+    public ResponseEntity<DadosListagemUsuario> adicionarPerfil(
+            @RequestBody @Valid DadosPerfil dadosPerfil,
+            @PathVariable Long userId
+    ){
+        var usuario = usuarioService.adicionarPerfil(userId, dadosPerfil);
+        return ResponseEntity.ok(new DadosListagemUsuario(usuario));
     }
 
 }

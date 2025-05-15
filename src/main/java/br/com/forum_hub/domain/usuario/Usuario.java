@@ -91,6 +91,10 @@ public class Usuario implements UserDetails {
         return token;
     }
 
+    public List<Perfil> getPerfis() {
+        return perfis;
+    }
+
     public void verificar() {
         if (expiracaoToken.isBefore(LocalDateTime.now())) {
             throw new RuntimeException("Token expirado");

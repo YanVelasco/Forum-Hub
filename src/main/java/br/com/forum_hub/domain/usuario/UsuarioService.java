@@ -1,14 +1,16 @@
 package br.com.forum_hub.domain.usuario;
 
+import br.com.forum_hub.domain.perfil.DadosPerfil;
 import br.com.forum_hub.domain.perfil.PerfilRepository;
 import br.com.forum_hub.domain.perfil.enums.PerfilNome;
 import br.com.forum_hub.infra.email.EmailService;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -18,7 +20,8 @@ public class UsuarioService implements UserDetailsService {
     private final EmailService emailService;
     private final PerfilRepository perfilRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder encoder, EmailService emailService, PerfilRepository perfilRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder encoder, EmailService emailService,
+                          PerfilRepository perfilRepository) {
         this.usuarioRepository = usuarioRepository;
         this.encoder = encoder;
         this.emailService = emailService;
@@ -32,7 +35,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
     @Transactional
-    public Usuario cadastrar( DadosCadastroUsuario dados) {
+    public Usuario cadastrar(DadosCadastroUsuario dados) {
         var senhaCriptografada = encoder.encode(dados.senha());
         var perfil = perfilRepository.findByPerfilNome(PerfilNome.ESTUDANTE);
         var usuario = new Usuario(dados, senhaCriptografada, perfil);
@@ -46,6 +49,16 @@ public class UsuarioService implements UserDetailsService {
                 () -> new RuntimeException("Usuário não encontrado")
         );
         usuario.verificar();
+    }
+
+    @Transactional
+    public Usuario adicionarPerfil(Long userId, @Valid DadosPerfil dadosPerfil) {
+        var usuario = usuarioRepository.findById(userId).orElseThrow(
+                () -> new RuntimeException("Usuário não encontrado")
+        );
+        var perfil = perfilRepository.findByPerfilNome(dadosPerfil.perfilNome());
+        usuario.getPerfis().add(perfil);
+        return usuarioRepository.save(usuario);
     }
 
 }
