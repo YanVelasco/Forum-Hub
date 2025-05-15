@@ -1,8 +1,8 @@
-INSERT INTO perfis(nome)
+INSERT INTO perfis(perfil_nome)
 VALUES ('ESTUDANTE');
-INSERT INTO perfis(nome)
+INSERT INTO perfis(perfil_nome)
 VALUES ('INSTRUTOR');
-INSERT INTO perfis(nome)
+INSERT INTO perfis(perfil_nome)
 VALUES ('MODERADOR');
-INSERT INTO perfis(nome)
+INSERT INTO perfis(perfil_nome)
 VALUES ('ADMIN');

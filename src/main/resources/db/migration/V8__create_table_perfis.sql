@@ -1,5 +1,5 @@
 CREATE TABLE perfis
 (
     id   BIGSERIAL PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL UNIQUE
+    perfil_nome VARCHAR(100) NOT NULL UNIQUE
 );
