@@ -1,6 +1,5 @@
 package br.com.forum_hub.controller;
 
-import br.com.forum_hub.domain.topico.DadosListagemTopico;
 import br.com.forum_hub.domain.usuario.DadosCadastroUsuario;
 import br.com.forum_hub.domain.usuario.DadosListagemUsuario;
 import br.com.forum_hub.domain.usuario.UsuarioService;
